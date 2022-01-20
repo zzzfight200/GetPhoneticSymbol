@@ -28,5 +28,5 @@ pip install -r requirements.txt
 python bing.py words.xlsx
 ```
 
-效果如图
+效果如图  
 ![image](https://raw.githubusercontent.com/zzzfight200/GetPhoneticSymbol/main/2.png)
