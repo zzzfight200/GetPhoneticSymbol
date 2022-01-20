@@ -9,7 +9,8 @@ def ReadWords(File,Coordinate):
     # with open(os.getcwd() + '\\words.txt', 'r', encoding='utf-8') as f:
     #     f.write(Response.text)
     try:
-        Excel = openpyxl.load_workbook(os.getcwd()+'\\'+FileName)
+        Excel = openpyxl.load_workbook(os.path.split(os.path.realpath(__file__))[0]+'\\'+File)
+        #print(os.path.split(os.path.realpath(__file__))[0])
     except Exception as e:
         # print(e)
         print('Open File error')
@@ -26,7 +27,7 @@ def SearchWords(Word):
         HttpHeaders = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:88.0) Gecko/20100101 Firefox/88.0'}
         Response = requests.get(url,headers=HttpHeaders)
         soup = BeautifulSoup(Response.text,'html.parser')
-        with open(os.getcwd()+'\\response.html','w',encoding='utf-8') as f:
+        with open(os.path.split(os.path.realpath(__file__))[0]+'\\response.html','w',encoding='utf-8') as f:
             f.write(Response.text)
         # print(soup)
     except Exception as e:
@@ -34,7 +35,7 @@ def SearchWords(Word):
         # print(e)
 def RegularFind():
     try:
-        with open(os.getcwd()+'\\response.html','r',encoding='utf-8') as f:
+        with open(os.path.split(os.path.realpath(__file__))[0]+'\\response.html','r',encoding='utf-8') as f:
             Content = f.read()
             PhoneticSymbolUK = re.findall("英\[.*?\]",Content)
             PhoneticSymbolUS = re.findall("美\[.*?\]", Content)
@@ -54,7 +55,7 @@ def RegularFind():
 
 def WritePhoneticSymbol(n,PhoneticSymbolUKStr,PhoneticSymbolUSStr):
     try:
-        Excel = openpyxl.load_workbook(os.getcwd() + '\\WordsWithPhoneticSymbol.xlsx')
+        Excel = openpyxl.load_workbook(os.path.split(os.path.realpath(__file__))[0] + '\\WordsWithPhoneticSymbol.xlsx')
     except Exception as e:
         # print(e)
         print('Open WordsWithPhoneticSymbol.xlsx error')
@@ -67,6 +68,11 @@ def WritePhoneticSymbol(n,PhoneticSymbolUKStr,PhoneticSymbolUSStr):
 
 
 if __name__ == '__main__':
+    try:
+        result=requests.get('https://www.bing.com')
+    except Exception as e:
+        print(str(e) +'\n'+'Can not connect to www.bing.com !')
+        sys.exit(1)
     FileName = sys.argv[1]
     os.system("copy %s %s" % (FileName,'WordsWithPhoneticSymbol.xlsx'))
     n = 1
